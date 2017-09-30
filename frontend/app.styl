@@ -1,0 +1,74 @@
+html, body
+  margin 0
+  padding 0
+
+galleryMargins = 3px
+directoryColor = #eee
+
+li.dir-list-item, div.navbar
+  font-family sans-serif
+
+// Darken gallery images on mouse hover
+li.dir-list-item, img
+  -webkit-filter brightness(100%)
+li.dir-list-item:hover, img:hover
+  -webkit-filter brightness(80%)
+
+// "Load more" button
+.load-more
+  width 100%
+  display flex
+  justify-content center
+.load-more-btn
+  border 1px solid #c2c2c2
+  background-color #f0f0f0
+  text-decoration none
+  color #404040
+  padding 0.5em 5em
+  margin 1em
+
+ul.dir-list
+  padding galleryMargins
+  list-style-type: none;
+
+
+directoryColor1 = #eed
+directoryColor2 = #ccc
+li.dir-list-item
+  display inline-block
+  margin-right 2em
+  margin-bottom 1em
+  border 1px solid ddd
+
+li.dir-list-item:hover
+  text-decoration underline
+
+a.dir-list-item
+  color #666 !important
+  font-weight bold
+  text-decoration none
+
+
+div.navbar
+  left 0
+  right 0
+  padding 1em
+  background-color #42485e
+  color #eee
+  font-weight bold
+
+div.content
+  padding 1em
+
+.dir-list-hidden
+  display: none !important
+
+
+.breadcrumb-divider
+  margin-left 0.5em
+  margin-right 0.5em
+
+.breadcrumb
+  color #eee !important
+  font-weight bold
+  text-decoration none

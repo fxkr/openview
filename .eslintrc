@@ -1,0 +1,14 @@
+{
+  "extends": "eslint-config-airbnb-base",
+
+  "globals": { // Also see webpack.config.js
+    "$": false,
+    "jQuery": false,
+
+    "PhotoSwipe": false,
+    "PhotoSwipeUI_Default": false,
+
+    "document": false,
+    "window": false
+  }
+}
