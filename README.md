@@ -32,3 +32,6 @@ The latter can be used either with a real [redis](https://redis.io/) server or a
 In the backend we use the type system to maximize safety and security by avoiding basic types wherever possible.
 For example, throughout the codebase absolute paths and relative paths are represented through safe absolute and relative path types, instead of strings.
 This makes certain categories of issues like for example [path traversal](https://www.owasp.org/index.php/Path_Traversal) very unlikely.
+
+We use [CircleCI 2.0](https://circleci.com/) for continuous integration.
+The builds are based on a [Docker](https://www.docker.com/) container built and hosted on [Quay](https://quay.io/).
