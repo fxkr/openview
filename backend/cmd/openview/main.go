@@ -46,9 +46,14 @@ func run() error {
 		profiling.SupportCPUProfiling(*cpuprofile, syscall.SIGUSR2)
 	}
 
-	return backend.Main(&backend.Config{
+	app, err := backend.NewApplication(&backend.Config{
 		ResourceDir: safe.UnsafeNewPath(*resourcedir),
 		CacheDir:    safe.UnsafeNewPath(*cachedir),
 		ImageDir:    safe.UnsafeNewPath(*imagedir),
 	})
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return errors.WithStack(app.Run())
 }

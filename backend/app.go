@@ -19,35 +19,37 @@ type Application struct {
 	service Service
 }
 
-func Main(config *Config) error {
+func NewApplication(config *Config) (*Application, error) {
 	Initialize()
 	defer Terminate()
 
 	c, err := cache.NewFileCache(config.CacheDir)
 	if err != nil {
-		return errors.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
 
 	mc, err := cache.NewMiniRedisCache(cache.MiniRedisCacheConfig{})
 	if err != nil {
-		return errors.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
 
-	return (&Application{
+	app := &Application{
 		config:  config,
 		router:  chi.NewRouter(),
 		service: NewService(config.ImageDir, config.ResourceDir, c, mc),
-	}).run()
-}
+	}
 
-func (app *Application) run() error {
 	r := app.router
 
 	r.Get("/static/*", app.handleResource)
 	r.Get("/*", app.handlePath)
 	r.NotFound(handler.Status(http.StatusNotFound).ServeHTTP)
 
-	err := http.ListenAndServe(":3000", r)
+	return app, nil
+}
+
+func (app *Application) Run() error {
+	err := http.ListenAndServe(":3000", app.router)
 	if err != nil {
 		return errors.WithStack(err)
 	}
