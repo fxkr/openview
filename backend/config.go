@@ -8,4 +8,6 @@ type Config struct {
 	ResourceDir safe.Path
 	CacheDir    safe.Path
 	ImageDir    safe.Path
+
+	ListenAddress string
 }
