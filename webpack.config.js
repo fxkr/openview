@@ -16,20 +16,6 @@ module.exports = {
     publicPath: '/',
   },
 
-  devServer: {
-    contentBase: path.resolve(__dirname, './frontend'),
-    proxy: {
-      '/images': {
-        target: 'http://localhost:3000/',
-        secure: false
-      },
-      '/api': {
-        target: 'http://localhost:3000/',
-        secure: false
-      },
-    },
-  },
-
   module: {
     loaders: [
       {test: /\.html/, loader: "file-loader?name=[name].[ext]"},
