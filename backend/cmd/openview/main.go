@@ -1,11 +1,11 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"syscall"
 
+	"github.com/namsral/flag"
 	"github.com/pkg/errors"
 
 	"github.com/fxkr/openview/backend"
@@ -22,16 +22,22 @@ func main() {
 }
 
 func run() error {
-	var resourcedir = flag.String("resourcedir", "", "path to resource files (read-only)")
-	var cachedir = flag.String("cachedir", "", "path to cache directory (read-write)")
-	var imagedir = flag.String("imagedir", "", "path to image files (read-only)")
+	fs := flag.NewFlagSetWithEnvPrefix(os.Args[0], "OPENVIEW", flag.ContinueOnError)
+	fs.String(flag.DefaultConfigFlagname, "", "path to config file (read-only)")
 
-	var cpuprofile = flag.String("cpuprofile", "", "write cpu profile `file` (write-only)")
-	var memprofile = flag.String("memprofile", "", "write memory profile to `file` (write-only)")
+	var resourcedir = fs.String("resourcedir", "", "path to resource files (read-only)")
+	var cachedir = fs.String("cachedir", "", "path to cache directory (read-write)")
+	var imagedir = fs.String("imagedir", "", "path to image files (read-only)")
 
-	var listen = flag.String("listen", ":3000", "`address:port` to listen on")
+	var cpuprofile = fs.String("cpuprofile", "", "write cpu profile `file` (write-only)")
+	var memprofile = fs.String("memprofile", "", "write memory profile to `file` (write-only)")
 
-	flag.Parse()
+	var listen = fs.String("listen", ":3000", "`address:port` to listen on")
+
+	err := fs.Parse(os.Args[1:])
+	if err != nil {
+		return errors.WithStack(err)
+	}
 
 	if *resourcedir == "" {
 		return errors.New("-resourcedir is mandatory")
