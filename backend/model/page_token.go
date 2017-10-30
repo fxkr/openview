@@ -96,11 +96,11 @@ func (pt *PageToken) LessThan(name string, isDir bool) bool {
 }
 
 func FileInfoLessThan(a, b os.FileInfo) bool {
-	if a.IsDir() != b.IsDir() { // directories before files
+	if a.IsDir() != b.IsDir() { // directories first
 		return a.IsDir()
-	} else { // otherwise, alphabetically
-		return a.Name() < b.Name()
 	}
+	// otherwise, alphabetically
+	return a.Name() < b.Name()
 }
 
 func (pt *PageToken) LessThanFileInfo(fi os.FileInfo) bool {
