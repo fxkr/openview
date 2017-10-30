@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	MAX_PAGE_SIZE     = 100
-	DEFAULT_PAGE_SIZE = 25
+	MaxPageSize     = 100
+	DefaultPageSize = 25
 )
 
 type Page struct {
@@ -18,7 +18,7 @@ type Page struct {
 
 func NewPage(pageToken string, pageSize string) (Page, error) {
 	if pageSize == "" {
-		return Page{pageToken, DEFAULT_PAGE_SIZE}, nil
+		return Page{pageToken, DefaultPageSize}, nil
 	}
 
 	pageSizeUint, err := strconv.ParseUint(pageSize, 10, 16)
@@ -27,9 +27,9 @@ func NewPage(pageToken string, pageSize string) (Page, error) {
 	}
 
 	if pageSizeUint <= 0 {
-		pageSizeUint = DEFAULT_PAGE_SIZE
-	} else if pageSizeUint > MAX_PAGE_SIZE {
-		pageSizeUint = MAX_PAGE_SIZE
+		pageSizeUint = DefaultPageSize
+	} else if pageSizeUint > MaxPageSize {
+		pageSizeUint = MaxPageSize
 	}
 
 	return Page{pageToken, int(pageSizeUint)}, nil

@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	THUMBNAIL_CONTENT_TYPE = "image/jpeg"
+	ThumbnailContentType = "image/jpeg"
 )
 
 func Initialize() {

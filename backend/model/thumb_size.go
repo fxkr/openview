@@ -10,7 +10,7 @@ type ThumbSize struct {
 }
 
 var (
-	THUMB_SIZES = map[string]ThumbSize{
+	ThumbSizes = map[string]ThumbSize{
 		"":     ThumbSize{"800", 800}, // "default"
 		"100":  ThumbSize{"100", 100},
 		"240":  ThumbSize{"240", 240},
@@ -24,7 +24,7 @@ var (
 )
 
 func NewThumbSize(s string) (ThumbSize, error) {
-	if result, ok := THUMB_SIZES[s]; ok {
+	if result, ok := ThumbSizes[s]; ok {
 		return result, nil
 	} else {
 		return ThumbSize{}, errors.Errorf("Bad thumbnail size: %v", s)
