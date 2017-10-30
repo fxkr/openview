@@ -31,132 +31,132 @@ func (s *PathSuite) TestUnsafeNewRelativePath(c *C) {
 }
 
 func (s *PathSuite) TestSafeNewRelativePathBasic(c *C) {
-	p, err := SafeNewRelativePath("test")
+	p, err := NewRelativePath("test")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, "test")
 	c.Assert(p.String(), Equals, "test")
 }
 
 func (s *PathSuite) TestSafeNewRelativePathSubdir(c *C) {
-	p, err := SafeNewRelativePath("a/b/c")
+	p, err := NewRelativePath("a/b/c")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, "a/b/c")
 	c.Assert(p.String(), Equals, "a/b/c")
 }
 
 func (s *PathSuite) TestSafeNewRelativePathSubdirLongerNames(c *C) {
-	p, err := SafeNewRelativePath("abc/def/ghi")
+	p, err := NewRelativePath("abc/def/ghi")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, "abc/def/ghi")
 	c.Assert(p.String(), Equals, "abc/def/ghi")
 }
 
 func (s *PathSuite) TestSafeNewRelativeDotted(c *C) {
-	p, err := SafeNewRelativePath(".a")
+	p, err := NewRelativePath(".a")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, ".a")
 	c.Assert(p.String(), Equals, ".a")
 }
 
 func (s *PathSuite) TestSafeNewRelativePathSubdirDotted(c *C) {
-	p, err := SafeNewRelativePath("a/.b")
+	p, err := NewRelativePath("a/.b")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, "a/.b")
 	c.Assert(p.String(), Equals, "a/.b")
 }
 
 func (s *PathSuite) TestSafeNewRelativePathSubdirDotDotted(c *C) {
-	p, err := SafeNewRelativePath("a/..b")
+	p, err := NewRelativePath("a/..b")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, "a/..b")
 	c.Assert(p.String(), Equals, "a/..b")
 }
 
 func (s *PathSuite) TestSafeNewRelativePathSubdirDotDotDotted(c *C) {
-	p, err := SafeNewRelativePath("a/...")
+	p, err := NewRelativePath("a/...")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, "a/...")
 	c.Assert(p.String(), Equals, "a/...")
 }
 
 func (s *PathSuite) TestSafeNewRelativePathSubdirDotDotDottedSubdir(c *C) {
-	p, err := SafeNewRelativePath("a/.../b")
+	p, err := NewRelativePath("a/.../b")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, "a/.../b")
 	c.Assert(p.String(), Equals, "a/.../b")
 }
 
 func (s *PathSuite) TestSafeNewRelativePathEmpty(c *C) {
-	p, err := SafeNewRelativePath("")
+	p, err := NewRelativePath("")
 	c.Assert(err, IsNil)
 	c.Assert(p.raw, Equals, "")
 	c.Assert(p.String(), Equals, ".") // (!)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorAbsolute(c *C) {
-	_, err := SafeNewRelativePath("/")
+	_, err := NewRelativePath("/")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorAbsoluteFile(c *C) {
-	_, err := SafeNewRelativePath("/a")
+	_, err := NewRelativePath("/a")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorAbsoluteDirectory(c *C) {
-	_, err := SafeNewRelativePath("/a/b")
+	_, err := NewRelativePath("/a/b")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorSlashSlash(c *C) {
-	_, err := SafeNewRelativePath("a//b")
+	_, err := NewRelativePath("a//b")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorDot(c *C) {
-	_, err := SafeNewRelativePath(".")
+	_, err := NewRelativePath(".")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorDotDot(c *C) {
-	_, err := SafeNewRelativePath("..")
+	_, err := NewRelativePath("..")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorFileDot(c *C) {
-	_, err := SafeNewRelativePath("a/.")
+	_, err := NewRelativePath("a/.")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorFileDotDot(c *C) {
-	_, err := SafeNewRelativePath("a/..")
+	_, err := NewRelativePath("a/..")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorSubdirDot(c *C) {
-	_, err := SafeNewRelativePath("a/./b")
+	_, err := NewRelativePath("a/./b")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorSubdirDotDot(c *C) {
-	_, err := SafeNewRelativePath("a/../b")
+	_, err := NewRelativePath("a/../b")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathErrorNullByte(c *C) {
-	_, err := SafeNewRelativePath("a/b\x00c/d")
+	_, err := NewRelativePath("a/b\x00c/d")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestSafeNewRelativePathTrailingSlash(c *C) {
-	_, err := SafeNewRelativePath("a/b/")
+	_, err := NewRelativePath("a/b/")
 	c.Assert(err, NotNil)
 }
 
 func (s *PathSuite) TestRelativeJoinRelative(c *C) {
-	l, err := SafeNewRelativePath("a/b")
+	l, err := NewRelativePath("a/b")
 	c.Assert(err, IsNil)
-	r, err := SafeNewRelativePath("c/d")
+	r, err := NewRelativePath("c/d")
 	c.Assert(err, IsNil)
 	p := l.Join(r)
 	c.Assert(err, IsNil)
@@ -164,9 +164,9 @@ func (s *PathSuite) TestRelativeJoinRelative(c *C) {
 }
 
 func (s *PathSuite) TestEmptyJoinRelative(c *C) {
-	l, err := SafeNewRelativePath("")
+	l, err := NewRelativePath("")
 	c.Assert(err, IsNil)
-	r, err := SafeNewRelativePath("c/d")
+	r, err := NewRelativePath("c/d")
 	c.Assert(err, IsNil)
 	p := l.Join(r)
 	c.Assert(err, IsNil)
@@ -174,9 +174,9 @@ func (s *PathSuite) TestEmptyJoinRelative(c *C) {
 }
 
 func (s *PathSuite) TestRelativeJoinEmpty(c *C) {
-	l, err := SafeNewRelativePath("a/b")
+	l, err := NewRelativePath("a/b")
 	c.Assert(err, IsNil)
-	r, err := SafeNewRelativePath("")
+	r, err := NewRelativePath("")
 	c.Assert(err, IsNil)
 	p := l.Join(r)
 	c.Assert(err, IsNil)
@@ -184,9 +184,9 @@ func (s *PathSuite) TestRelativeJoinEmpty(c *C) {
 }
 
 func (s *PathSuite) TestEmptyRelativePathJoinEmptyRelativePath(c *C) {
-	l, err := SafeNewRelativePath("")
+	l, err := NewRelativePath("")
 	c.Assert(err, IsNil)
-	r, err := SafeNewRelativePath("")
+	r, err := NewRelativePath("")
 	c.Assert(err, IsNil)
 	p := l.Join(r)
 	c.Assert(err, IsNil)
