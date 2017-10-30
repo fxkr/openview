@@ -25,12 +25,12 @@ type RelativePath struct {
 	Path
 }
 
-// For json.Marshaler
+// MarshalJSON implements json.Marshaler.
 func (p Path) MarshalJSON() ([]byte, error) {
 	return json.Marshal(p.String())
 }
 
-// For json.Unmarshaler
+// UnmarshalJSON implements json.Unmarshaler.
 func (p *RelativePath) UnmarshalJSON(data []byte) error {
 	var rawPath string
 	err := json.Unmarshal(data, &rawPath)
@@ -52,7 +52,7 @@ func UnsafeNewPath(safe string) Path {
 	return Path{safe}
 }
 
-// UnsafeNewPath converts a string to a path.
+// UnsafeNewRelativePath converts a string to a path.
 //
 // safeRelativePath must be trustworthy.
 // safeRelativePath must be relative.
@@ -105,7 +105,7 @@ func (p Path) Join(extensionPath RelativePath) Path {
 	return Path{filepath.Join(p.raw, extensionPath.raw)}
 }
 
-// Join concatenates two paths. trustedString must be a safe, relative path.
+// JoinUnsafe concatenates two paths. trustedString must be a safe, relative path.
 func (p Path) JoinUnsafe(trustedString string) Path {
 	if p.raw == "" {
 		return UnsafeNewPath(trustedString)
