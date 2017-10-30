@@ -25,8 +25,11 @@ func run() error {
 	var resourcedir = flag.String("resourcedir", "", "path to resource files (read-only)")
 	var cachedir = flag.String("cachedir", "", "path to cache directory (read-write)")
 	var imagedir = flag.String("imagedir", "", "path to image files (read-only)")
+
 	var cpuprofile = flag.String("cpuprofile", "", "write cpu profile `file` (write-only)")
 	var memprofile = flag.String("memprofile", "", "write memory profile to `file` (write-only)")
+
+	var listen = flag.String("listen", ":3000", "`address:port` to listen on")
 
 	flag.Parse()
 
@@ -50,6 +53,8 @@ func run() error {
 		ResourceDir: safe.UnsafeNewPath(*resourcedir),
 		CacheDir:    safe.UnsafeNewPath(*cachedir),
 		ImageDir:    safe.UnsafeNewPath(*imagedir),
+
+		ListenAddress: *listen,
 	})
 	if err != nil {
 		return errors.WithStack(err)

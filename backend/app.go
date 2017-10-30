@@ -51,7 +51,7 @@ func NewApplication(config *Config) (*Application, error) {
 }
 
 func (app *Application) Run() error {
-	err := http.ListenAndServe(":3000", app.router)
+	err := http.ListenAndServe(app.config.ListenAddress, app.router)
 	if err != nil {
 		return errors.WithStack(err)
 	}
