@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 
@@ -59,7 +60,10 @@ module.exports = {
 
       PhotoSwipe: 'photoswipe',
       PhotoSwipeUI_Default: 'photoswipe/src/js/ui/photoswipe-ui-default.js'
-    })
+    }),
+    new CopyWebpackPlugin([
+      { from: 'favicon.ico' },
+    ]),
   ],
 
   cache: true,
