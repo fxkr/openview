@@ -60,7 +60,7 @@ func (app *Application) Run() error {
 }
 
 func (app *Application) handleResourceFile(w http.ResponseWriter, r *http.Request) {
-	relativePath, err := safe.SafeNewRelativePath(strings.Trim(r.URL.Path, "/"))
+	relativePath, err := safe.NewRelativePath(strings.Trim(r.URL.Path, "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -70,7 +70,7 @@ func (app *Application) handleResourceFile(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *Application) handleResource(w http.ResponseWriter, r *http.Request) {
-	relativePath, err := safe.SafeNewRelativePath(chi.URLParam(r, "*"))
+	relativePath, err := safe.NewRelativePath(chi.URLParam(r, "*"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -102,7 +102,7 @@ func (app *Application) handlePath(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) handleFile(w http.ResponseWriter, r *http.Request) {
-	path, err := safe.SafeNewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
+	path, err := safe.NewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -118,7 +118,7 @@ func (app *Application) handleDirectoryInfo(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	path, err := safe.SafeNewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
+	path, err := safe.NewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -128,7 +128,7 @@ func (app *Application) handleDirectoryInfo(w http.ResponseWriter, r *http.Reque
 }
 
 func (app *Application) handleImageInfo(w http.ResponseWriter, r *http.Request) {
-	path, err := safe.SafeNewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
+	path, err := safe.NewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -138,7 +138,7 @@ func (app *Application) handleImageInfo(w http.ResponseWriter, r *http.Request) 
 }
 
 func (app *Application) handleThumbnail(w http.ResponseWriter, r *http.Request) {
-	path, err := safe.SafeNewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
+	path, err := safe.NewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return

@@ -61,13 +61,13 @@ func UnsafeNewRelativePath(safeRelativePath string) RelativePath {
 	return RelativePath{Path{safeRelativePath}}
 }
 
-// SafeNewRelativePath converts a string to a path.
+// NewRelativePath converts a string to a path.
 //
 // unsafe may be user/attacker-controlled.
 // unsafe should not be absolute, otherwise an error is returned.
 // unsafe should be normalized, otherwise an error is returned.
 // unsafe should not be empty, otherwise an error is returned.
-func SafeNewRelativePath(unsafe string) (RelativePath, error) {
+func NewRelativePath(unsafe string) (RelativePath, error) {
 	if !isSafeRelativePath(unsafe) {
 		return RelativePath{}, errors.Errorf("Unsafe path: %v", unsafe)
 	}
