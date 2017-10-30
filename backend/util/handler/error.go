@@ -30,17 +30,17 @@ func Status(status int) *ErrorHandler {
 	return &ErrorHandler{status, errors.New(http.StatusText(status))}
 }
 
-// For github.com/pkg/errors.causer.
+// Cause implements github.com/pkg/errors.causer.
 func (e *ErrorHandler) Cause() error {
 	return e.cause
 }
 
-// For error.error.
+// Error implements error.error.
 func (e *ErrorHandler) Error() string {
 	return http.StatusText(e.status)
 }
 
-// For json.Marshaler
+// MarshalJSON implements json.Marshaler.
 func (e *ErrorHandler) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Status int

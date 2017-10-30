@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// Keys address values in a Cache.
+// Key address a value in a Cache.
 //
 // Caches takes Keys instead of strings to encourage compile time safety.
 type Key interface {
