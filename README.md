@@ -12,6 +12,8 @@ Design criteria:
 
 The frontend was inspired by [Tumblr](https://www.tumblr.com/)'s low-distraction image wall, [flickr](http://www.flickr.com/)'s elegant layout and [fgallery](https://www.thregr.org/~wavexx/software/fgallery/)'s minimal UI.
 
+License: MIT (see LICENSE file)
+
 
 # Contributing
 

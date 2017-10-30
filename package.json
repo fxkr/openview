@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "",
   "author": "Felix Kaiser",
-  "license": "AGPL-3.0",
+  "license": "MIT",
   "dependencies": {
     "jquery": "^3.2.1",
     "jscroll": "^2.3.9",
