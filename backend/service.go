@@ -153,7 +153,7 @@ func (s *service) GetImageThumbnail(path safe.RelativePath, size model.ThumbSize
 
 	h, err := s.thumbnailCache.GetHandler(cacheKey, func() ([]byte, error) {
 		return s.getThumbnail(path, size)
-	}, THUMBNAIL_CONTENT_TYPE)
+	}, ThumbnailContentType)
 
 	if err != nil {
 		return handler.Error(err)
