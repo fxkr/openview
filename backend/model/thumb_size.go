@@ -24,9 +24,9 @@ var (
 )
 
 func NewThumbSize(s string) (ThumbSize, error) {
-	if result, ok := ThumbSizes[s]; ok {
-		return result, nil
-	} else {
+	result, ok := ThumbSizes[s]
+	if !ok {
 		return ThumbSize{}, errors.Errorf("Bad thumbnail size: %v", s)
 	}
+	return result, nil
 }
