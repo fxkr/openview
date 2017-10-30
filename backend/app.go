@@ -40,7 +40,9 @@ func NewApplication(config *Config) (*Application, error) {
 	}
 
 	r := app.router
-
+	for _, file := range []string{"favicon.ico"} {
+		r.Get("/"+file, app.handleResourceFile)
+	}
 	r.Get("/static/*", app.handleResource)
 	r.Get("/*", app.handlePath)
 	r.NotFound(handler.Status(http.StatusNotFound).ServeHTTP)
@@ -55,6 +57,16 @@ func (app *Application) Run() error {
 	}
 
 	return nil
+}
+
+func (app *Application) handleResourceFile(w http.ResponseWriter, r *http.Request) {
+	relativePath, err := safe.SafeNewRelativePath(strings.Trim(r.URL.Path, "/"))
+	if err != nil {
+		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
+		return
+	}
+	fullPath := app.config.ResourceDir.Join(relativePath)
+	http.ServeFile(w, r, fullPath.String())
 }
 
 func (app *Application) handleResource(w http.ResponseWriter, r *http.Request) {
