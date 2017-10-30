@@ -123,14 +123,14 @@ func isSafeRelativePath(path string) bool {
 	type State int
 
 	const (
-		state_begin  State = iota // Initial state at start of string. Expect anything except slash.
-		state_slash               // Previous character was a slash between two components.
-		state_dot                 // Previous character was a dot at the beginning of a component
-		state_dotdot              // Previous character was a second dot at the beginning of a component
-		state_safe                // We're safely within a component (we know it's not empty, "." or "..").
+		stateBegin  State = iota // Initial state at start of string. Expect anything except slash.
+		stateSlash               // Previous character was a slash between two components.
+		stateDot                 // Previous character was a dot at the beginning of a component
+		stateDotDot              // Previous character was a second dot at the beginning of a component
+		stateSafe                // We're safely within a component (we know it's not empty, "." or "..").
 	)
 
-	state := state_begin
+	state := stateBegin
 
 	for _, char := range path {
 		switch char {
@@ -140,33 +140,33 @@ func isSafeRelativePath(path string) bool {
 
 		case '/':
 			switch state {
-			case state_begin:
+			case stateBegin:
 				return false // Path starts with slash -> not relative.
-			case state_slash:
+			case stateSlash:
 				return false // Path contains two consecutive slashes -> not normalized.
-			case state_dot:
+			case stateDot:
 				return false // Paths contains "." component -> not normalized.
-			case state_dotdot:
+			case stateDotDot:
 				return false // Paths contains ".." component -> not normalized or goes above the base.
-			case state_safe:
-				state = state_slash // This slash is safely preceded by a directory name.
+			case stateSafe:
+				state = stateSlash // This slash is safely preceded by a directory name.
 			}
 
 		case '.':
 			switch state {
-			case state_begin, state_slash:
-				state = state_dot // This dot is at the start of a new component.
-			case state_dot:
-				state = state_dotdot // This and the previous dot are at the start of a new component.
-			case state_dotdot, state_safe:
-				state = state_safe // Three or more leading dots in a component are acceptable.
+			case stateBegin, stateSlash:
+				state = stateDot // This dot is at the start of a new component.
+			case stateDot:
+				state = stateDotDot // This and the previous dot are at the start of a new component.
+			case stateDotDot, stateSafe:
+				state = stateSafe // Three or more leading dots in a component are acceptable.
 			}
 
 		default:
-			state = state_safe // Any characters other than null, slash or dot are considered safe.
+			state = stateSafe // Any characters other than null, slash or dot are considered safe.
 		}
 	}
 
 	// Note: empty paths are allowed
-	return state == state_begin || state == state_safe
+	return state == stateBegin || state == stateSafe
 }
