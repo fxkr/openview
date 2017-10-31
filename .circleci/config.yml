@@ -1,36 +1,28 @@
 # CircleCI 2.0 configuration file
 version: 2
-jobs:
-  build:
 
+jobs:
+
+  build:
     docker:
       - image: quay.io/fxkr/openview-ci:latest
-
     dependencies:
       pre:
       - sudo apt-get update
       - sudo apt-get install libmagickwand-dev
-
     working_directory: /go/src/github.com/fxkr/openview
-
     steps:
-
       - checkout
-
       - restore_cache:
           key: yarn-cache-{{ checksum "package.json" }}
-
-      - run: diff -u <(echo -n) <(gofmt -d ./)
-      - run: go get -v -t -d ./...
-      - run: go vet ./...
-
-      - run: yarn install
-      - run: node_modules/.bin/webpack
-
-      - run: go test -v ./...
-
+      - run: make test-gofmt
+      - run: make test-govet
+      - run: make deps-backend
+      - run: make deps-frontend
+      - run: make build-backend
+      - run: make build-frontend
+      - run: make test-gotest
       - save_cache:
           key: yarn-cache-{{ checksum "package.json" }}
           paths:
-            # See output of "yarn cache dir"
-            - /usr/local/share/.cache/yarn/v1
+            - /usr/local/share/.cache/yarn/v1 # See output of "yarn cache dir"
