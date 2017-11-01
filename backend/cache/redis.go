@@ -6,7 +6,10 @@ import (
 
 	"net/http"
 
+	"bytes"
+
 	"github.com/fxkr/openview/backend/util/handler"
+	"github.com/fxkr/openview/backend/util/safe"
 )
 
 // RedisCache is Cache implementation that stores keys on a Redis server.
@@ -48,8 +51,11 @@ func (c *RedisCache) Close() {
 	c.Close()
 }
 
-func (c *RedisCache) Put(key Key, value []byte) error {
-	_, err := c.db.Do("SET", c.config.Prefix+key.String(), value)
+func (c *RedisCache) Put(key Key, version Version, value []byte) error {
+	dataKey := c.config.Prefix + key.String()
+	versionKey := c.config.Prefix + safe.NewKey(key.String(), "ver").String()
+
+	_, err := c.db.Do("MSET", dataKey, value, versionKey, []byte(version.String()))
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -57,18 +63,24 @@ func (c *RedisCache) Put(key Key, value []byte) error {
 	return nil
 }
 
-func (c *RedisCache) GetBytes(key Key, filler func() ([]byte, error)) ([]byte, error) {
-	value, err := redis.Bytes(c.db.Do("GET", c.config.Prefix+key.String()))
-	if err == nil {
-		return value, nil // Cache hit
+func (c *RedisCache) GetBytes(key Key, version Version, filler func() (Version, []byte, error)) ([]byte, error) {
+	dataKey := c.config.Prefix + key.String()
+	versionKey := c.config.Prefix + safe.NewKey(key.String(), "ver").String()
+
+	values, err := redis.ByteSlices(c.db.Do("MGET", versionKey, dataKey))
+	if err == nil && len(values) == 2 { // Cache hit?
+		if bytes.Equal(values[0], []byte(version.String())) { // Cache up to date?
+			cachedBytes := values[1]
+			return cachedBytes, nil
+		}
 	}
 
-	value, err = filler()
+	version, value, err := filler()
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 
-	err = c.Put(key, value)
+	err = c.Put(key, version, value)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -76,8 +88,8 @@ func (c *RedisCache) GetBytes(key Key, filler func() ([]byte, error)) ([]byte, e
 	return value, nil
 }
 
-func (c *RedisCache) GetHandler(key Key, filler func() ([]byte, error), contentType string) (http.Handler, error) {
-	bytes, err := c.GetBytes(key, filler)
+func (c *RedisCache) GetHandler(key Key, version Version, filler func() (Version, []byte, error), contentType string) (http.Handler, error) {
+	bytes, err := c.GetBytes(key, version, filler)
 	if err != nil {
 		return nil, err
 	}

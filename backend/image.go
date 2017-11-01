@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"gopkg.in/gographics/imagick.v2/imagick"
 
+	"github.com/fxkr/openview/backend/cache"
 	"github.com/fxkr/openview/backend/model"
 	"github.com/fxkr/openview/backend/util/handler"
 	"github.com/fxkr/openview/backend/util/safe"
@@ -30,26 +31,35 @@ type ThumbnailOptions struct {
 	Height *int
 }
 
+func (s *service) getImageVersion(fileInfo os.FileInfo) cache.Version {
+	return safe.NewKey(fileInfo.ModTime(), fileInfo.Size())
+}
+
 func (s *service) getImageData(path safe.RelativePath) (*model.Image, error) {
 	cacheKey := safe.NewKey("imagemeta", path.String())
 
-	resultBuf, err := s.metadataCache.GetBytes(cacheKey, func() ([]byte, error) {
+	fullPath := s.base.Join(path)
 
-		fullPath := s.base.Join(path)
+	fileInfo, err := os.Stat(fullPath.String())
+	if err != nil {
+		return nil, handler.StatusError(http.StatusNotFound, errors.WithStack(err))
+	}
 
-		fileInfo, err := os.Stat(fullPath.String())
-		if err != nil {
-			return nil, handler.StatusError(http.StatusNotFound, errors.WithStack(err))
-		}
+	cacheVersion := s.getImageVersion(fileInfo)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	resultBuf, err := s.metadataCache.GetBytes(cacheKey, cacheVersion, func() (cache.Version, []byte, error) {
 		if !isImage(fileInfo) {
-			return nil, handler.StatusError(http.StatusNotFound, errors.WithStack(err))
+			return nil, nil, handler.StatusError(http.StatusNotFound, errors.WithStack(err))
 		}
 
 		mw := imagick.NewMagickWand()
 		defer mw.Destroy()
 		err = mw.ReadImage(fullPath.String())
 		if err != nil {
-			return nil, handler.StatusError(http.StatusInternalServerError, errors.WithStack(err))
+			return nil, nil, handler.StatusError(http.StatusInternalServerError, errors.WithStack(err))
 		}
 
 		width := mw.GetImageWidth()
@@ -63,10 +73,10 @@ func (s *service) getImageData(path safe.RelativePath) (*model.Image, error) {
 
 		buf, err := json.Marshal(value)
 		if err != nil {
-			return nil, errors.WithStack(err)
+			return nil, nil, errors.WithStack(err)
 		}
 
-		return buf, nil
+		return cacheVersion, buf, nil
 	})
 
 	if err != nil {

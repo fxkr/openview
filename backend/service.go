@@ -151,8 +151,15 @@ func (s *service) GetImageThumbnail(path safe.RelativePath, size model.ThumbSize
 		return handler.Status(http.StatusNotFound)
 	}
 
-	h, err := s.thumbnailCache.GetHandler(cacheKey, func() ([]byte, error) {
-		return s.getThumbnail(path, size)
+	cacheVersion := s.getImageVersion(fileInfo)
+
+	h, err := s.thumbnailCache.GetHandler(cacheKey, cacheVersion, func() (cache.Version, []byte, error) {
+		bytes, err := s.getThumbnail(path, size)
+		if err != nil {
+			return nil, nil, errors.WithStack(err)
+		}
+
+		return cacheVersion, bytes, nil
 	}, ThumbnailContentType)
 
 	if err != nil {
