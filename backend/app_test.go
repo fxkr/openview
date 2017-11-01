@@ -29,7 +29,7 @@ type AppSuite struct {
 func (s *AppSuite) SetUpTest(c *C) {
 	tempDir, err := ioutil.TempDir("", "openview-test")
 	if err != nil {
-		c.Fatal("Error: %+v", errors.WithStack(err))
+		c.Fatalf("Error: %+v", errors.WithStack(err))
 	}
 
 	s.tempDir = safe.UnsafeNewPath(tempDir)
@@ -38,11 +38,11 @@ func (s *AppSuite) SetUpTest(c *C) {
 
 	err = os.Mkdir(s.cacheDir.String(), 0700)
 	if err != nil {
-		c.Fatal("Error: %+v", errors.WithStack(err))
+		c.Fatalf("Error: %+v", errors.WithStack(err))
 	}
 	err = os.Mkdir(s.imageDir.String(), 0700)
 	if err != nil {
-		c.Fatal("Error: %+v", errors.WithStack(err))
+		c.Fatalf("Error: %+v", errors.WithStack(err))
 	}
 
 	s.app, err = NewApplication(&Config{
@@ -51,7 +51,7 @@ func (s *AppSuite) SetUpTest(c *C) {
 		ImageDir:    s.imageDir,
 	})
 	if err != nil {
-		c.Fatal("Error: %+v", errors.WithStack(err))
+		c.Fatalf("Error: %+v", errors.WithStack(err))
 	}
 }
 
@@ -67,12 +67,12 @@ func (s *AppSuite) TearDownSuite(c *C) {
 func (s *AppSuite) TestFavicon(c *C) {
 	expectedBytes, err := ioutil.ReadFile("../dist/favicon.ico")
 	if err != nil {
-		c.Fatal("Error: %+v", errors.WithStack(err))
+		c.Fatalf("Error: %+v", errors.WithStack(err))
 	}
 
 	req, err := http.NewRequest("GET", "/favicon.ico", nil)
 	if err != nil {
-		c.Fatal("Error: %+v", errors.WithStack(err))
+		c.Fatalf("Error: %+v", errors.WithStack(err))
 	}
 	rr := httptest.NewRecorder()
 	s.app.router.ServeHTTP(rr, req)
