@@ -35,7 +35,7 @@ func NewFileCache(path safe.Path) (*FileCache, error) {
 	return &FileCache{path}, nil
 }
 
-func (c *FileCache) Put(key Key, buffer []byte) error {
+func (c *FileCache) Put(key Key, version Version, buffer []byte) error {
 
 	// Created temporary file
 	filePath := c.getFilePath(key)
@@ -60,7 +60,7 @@ func (c *FileCache) Put(key Key, buffer []byte) error {
 	return nil
 }
 
-func (c *FileCache) GetBytes(key Key, filler func() ([]byte, error)) ([]byte, error) {
+func (c *FileCache) GetBytes(key Key, version Version, filler func() (Version, []byte, error)) ([]byte, error) {
 	file := c.getFilePath(key)
 
 	err := c.checkFile(file)
@@ -68,12 +68,12 @@ func (c *FileCache) GetBytes(key Key, filler func() ([]byte, error)) ([]byte, er
 		return ioutil.ReadFile(file.String())
 	}
 
-	value, err := filler()
+	version, value, err := filler()
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 
-	err = c.Put(key, value)
+	err = c.Put(key, version, value)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -81,7 +81,7 @@ func (c *FileCache) GetBytes(key Key, filler func() ([]byte, error)) ([]byte, er
 	return value, nil
 }
 
-func (c *FileCache) GetHandler(key Key, filler func() ([]byte, error), contentType string) (http.Handler, error) {
+func (c *FileCache) GetHandler(key Key, version Version, filler func() (Version, []byte, error), contentType string) (http.Handler, error) {
 	file := c.getFilePath(key)
 
 	err := c.checkFile(file)
@@ -89,12 +89,12 @@ func (c *FileCache) GetHandler(key Key, filler func() ([]byte, error), contentTy
 		return &handler.FileHandler{Path: file}, nil // Cache hit
 	}
 
-	value, err := filler()
+	version, value, err := filler()
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 
-	err = c.Put(key, value)
+	err = c.Put(key, version, value)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
