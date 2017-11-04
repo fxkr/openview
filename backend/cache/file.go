@@ -65,6 +65,7 @@ func (c *FileCache) GetBytes(key Key, version Version, filler func() (Version, [
 
 	err := c.checkFile(file)
 	if err == nil {
+		// Cache hit
 		return ioutil.ReadFile(file.String())
 	}
 
@@ -86,6 +87,7 @@ func (c *FileCache) GetHandler(key Key, version Version, filler func() (Version,
 
 	err := c.checkFile(file)
 	if err == nil {
+		// Cache hit
 		return &handler.FileHandler{Path: file}, nil // Cache hit
 	}
 
