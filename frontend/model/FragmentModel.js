@@ -4,7 +4,7 @@ export default class FragmentModel {
   }
 
   getFragments() {
-    let fragmentNames = this.urlModel.getDirectory().split('/');
+    let fragmentNames = this.urlModel.getDirectory().replace(/^\/|\/$/g, '').split('/');
     if (fragmentNames[0] === '') {
       fragmentNames = fragmentNames.slice(1);
     }
