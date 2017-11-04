@@ -53,9 +53,12 @@ func (e *ErrorHandler) MarshalJSON() ([]byte, error) {
 
 // For http.Handler.
 func (e *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	cause := errors.WithStack(e.cause)
+
 	log.WithError(e).WithFields(log.Fields{
 		"status": e.status,
 		"path":   r.URL.Path,
+		"cause":  cause,
 	}).Error("Request failed")
 
 	// Show pretty-printed response for manual requests
