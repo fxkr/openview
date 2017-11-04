@@ -34,7 +34,7 @@ class View {
     this.more$ = new Subject();
     this.ready$ = new Subject();
 
-    this.navbar = $('.navbar');
+    this.navbar = $('.navbar-directory');
     this.gallery = $('.gallery');
     this.directoryList = $('.dir-list');
     this.photoswipe = $('.pswp');

@@ -56,6 +56,8 @@ div.navbar
   background-color #42485e
   color #eee
   font-weight bold
+  display flex /* or inline-flex */
+  justify-content space-between
 
 div.content
   padding 1em
@@ -71,3 +73,34 @@ div.content
   color #eee !important
   font-weight bold
   text-decoration none
+
+// Make project logo/link unobtrusive.
+.navbar-project
+  -webkit-filter grayscale(75%);
+  -moz-filter grayscale(75%);
+  -ms-filter grayscale(75%);
+  -o-filter grayscale(75%);
+  transition all 200ms ease;
+.navbar-project:hover
+  -webkit-filter grayscale(0%);
+  -moz-filter grayscale(0%);
+  -ms-filter grayscale(0%);
+  -o-filter grayscale(0%);
+  transition all 200ms ease;
+
+// Aligning the logo with the text is hacky, because:
+//
+// a) The text doesn't contain upper-case letters
+// b) The logo isn't square, there are transparent bands at top/bottom
+//
+// These mostly, but not exactly, cancel each other out.
+.navbar-project-logo
+  height 1em
+  vertical-align bottom
+  margin-bottom 0.1em // hack
+
+// Project name should have same color as project logo.
+.navbar-project a
+  &:link, &:hover, &:active, &:visited
+    color #6699ff // same as logo
+    text-decoration none
