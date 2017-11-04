@@ -66,7 +66,7 @@ func (e *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
 		w.Header().Set("X-Content-bType-Options", "nosniff")
 		w.WriteHeader(e.status)
-		fmt.Fprintf(w, "%d %s\n\n%+v\n\n", e.status, http.StatusText(e.status), e.cause)
+		fmt.Fprintf(w, "%d %s\n\n%+v\n\n", e.status, http.StatusText(e.status), cause)
 		return
 	}
 
