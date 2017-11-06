@@ -6,6 +6,8 @@ PACKAGE_URL := https://github.com/fxkr/openview
 PACKAGE_ARCH := amd64
 
 .PHONY: all \
+	all-direct \
+	build \
 	version \
 	deps-backend \
 	deps-frontend \
@@ -17,7 +19,20 @@ PACKAGE_ARCH := amd64
 	install \
 	package-deb
 
-all: deps-backend \
+all:
+	docker pull quay.io/fxkr/openview-ci:latest
+	docker run \
+		--tty \
+		--interactive \
+		--rm \
+		--volume "$(realpath .)":/go/src/github.com/fxkr/openview \
+		--workdir /go/src/github.com/fxkr/openview \
+		quay.io/fxkr/openview-ci:latest \
+		make all-direct DESTDIR=/tmp/package
+
+all-direct: build install package-deb
+
+build: deps-backend \
 	deps-frontend \
 	build-backend \
 	build-frontend
