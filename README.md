@@ -15,6 +15,13 @@ The frontend was inspired by [Tumblr](https://www.tumblr.com/)'s low-distraction
 License: MIT (see LICENSE file)
 
 
+## Installation
+
+Official binary release packages are available on [packagecloud](https://packagecloud.io/fxkr/openview/install).
+
+Add the repository, then install `openview` via your package manager.
+
+
 ## Contributions
 
 Thank you for your interest! Contributions to this project are very welcome.
