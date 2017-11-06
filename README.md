@@ -21,6 +21,8 @@ Official binary release packages are available on [packagecloud](https://package
 
 Add the repository, then install `openview` via your package manager.
 
+If you would prefer to build from source, see [BUILDING](BUILDING.md).
+
 
 ## Contributions
 
