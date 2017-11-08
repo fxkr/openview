@@ -1,6 +1,7 @@
 [Unit]
 Description=A modern image gallery
 After=network.target
+Documentation=https://github.com/fxkr/openview
 
 [Service]
 Type=simple
