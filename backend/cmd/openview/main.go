@@ -29,8 +29,8 @@ func run() error {
 	var cachedir = fs.String("cachedir", "", "path to cache directory (read-write)")
 	var imagedir = fs.String("imagedir", "", "path to image files (read-only)")
 
-	var cpuprofile = fs.String("cpuprofile", "", "write cpu profile `file` (write-only)")
-	var memprofile = fs.String("memprofile", "", "write memory profile to `file` (write-only)")
+	var memprofile = fs.String("memprofile", "", "on SIGUSR1, write memory profile to `file` (write-only)")
+	var cpuprofile = fs.String("cpuprofile", "", "on SIGUSR2, finish/restart cpu profile `file` (write-only)")
 
 	var listen = fs.String("listen", ":3000", "`address:port` to listen on")
 
