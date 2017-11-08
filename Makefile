@@ -65,7 +65,8 @@ install:
 	install -m 0755 -d "$(DESTDIR)/usr/share/openview/static"
 	install -m 0644 dist/* "$(DESTDIR)/usr/share/openview/static"
 	install -m 0755 -D openview "$(DESTDIR)/usr/bin/openview"
-	install -m 0755 -D openview.service "$(DESTDIR)/usr/lib/systemd/system/openview.sevice"
+	install -m 0755 -D openview.conf "$(DESTDIR)/usr/share/openview/default.conf"
+	install -m 0755 -D openview.service "$(DESTDIR)/lib/systemd/system/openview.service"
 
 package-deb:
 	fpm \
