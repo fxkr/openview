@@ -80,7 +80,7 @@ package-deb:
 		-s dir \
 		-t deb \
 		--deb-systemd  "openview.service" \
-		--depends      "libmagickwand" \
+		--depends      "libmagickwand-dev" \
 		"$(DESTDIR)"
 
 package-deb-deploy:
