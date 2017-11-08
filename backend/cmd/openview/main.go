@@ -36,7 +36,7 @@ func run() error {
 
 	err := fs.Parse(os.Args[1:])
 	if err != nil {
-		return errors.WithStack(err)
+		os.Exit(1) // flag prints its own errors
 	}
 
 	if *resourcedir == "" {
