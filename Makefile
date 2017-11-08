@@ -62,6 +62,8 @@ test-gotest:
 	go test -v ./...
 
 install:
+	install -m 0755 -d "$(DESTDIR)/var/cache/openview"
+	install -m 0755 -d "$(DESTDIR)/srv/images"
 	install -m 0755 -d "$(DESTDIR)/usr/share/openview/static"
 	install -m 0644 dist/* "$(DESTDIR)/usr/share/openview/static"
 	install -m 0755 -D openview "$(DESTDIR)/usr/bin/openview"
@@ -81,7 +83,7 @@ package-deb:
 		-t deb \
 		--deb-systemd  "openview.service" \
 		--depends      "libmagickwand-dev" \
-		"$(DESTDIR)"
+		"$(DESTDIR)/=/"
 
 package-deb-deploy:
 	package_cloud push fxkr/openview/debian/jessie "$(PACKAGE_NAME)_$(PACKAGE_VERSION)_$(PACKAGE_ARCH).deb"
