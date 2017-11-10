@@ -65,6 +65,14 @@ func (s *service) getImageData(path safe.RelativePath) (*model.Image, error) {
 		width := mw.GetImageWidth()
 		height := mw.GetImageHeight()
 
+		orientation := mw.GetImageOrientation()
+		if orientation == imagick.ORIENTATION_LEFT_TOP ||
+			orientation == imagick.ORIENTATION_RIGHT_TOP ||
+			orientation == imagick.ORIENTATION_RIGHT_BOTTOM ||
+			orientation == imagick.ORIENTATION_LEFT_BOTTOM {
+			width, height = height, width
+		}
+
 		value := model.Image{
 			Item:   model.Item{Name: path.Base(), RelativePath: path},
 			Width:  width,
@@ -126,6 +134,11 @@ func (s *service) renderThumbnail(path safe.RelativePath, size model.ThumbSize) 
 	}
 
 	err = mw.ResizeImage(width, height, imagick.FILTER_LANCZOS, 1)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	err = mw.AutoOrientImage()
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

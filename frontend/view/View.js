@@ -119,10 +119,12 @@ class View {
 
   onNewImagesExtendGallery(newImages) {
     newImages.forEach((newImageData) => {
+      const { width, height } = newImageData;
+
       const img = $('<img>', {
         src: PLACEHOLDER_IMAGE, // Don't temporarily load wrong thumbnail size.
-        width: newImageData.width,
-        height: newImageData.height,
+        width,
+        height,
         alt: newImageData.name,
       });
 
@@ -131,8 +133,8 @@ class View {
 
       // Tell JustifiedGallery about ratio.
       // Without, it would infer the ratio from the 1x1 placeholder image.
-      img.data('width', newImageData.width);
-      img.data('height', newImageData.height);
+      img.data('width', width);
+      img.data('height', height);
 
       const imgLink = $('<a>', {
         href: newImageData.url,
@@ -148,13 +150,32 @@ class View {
         this.showSlideshow(event.data);
       });
 
+      // Serve thumbnail, not raw image.
+      // Benefits:
+      // 1. Very large pictures don't slow slideshow down.
+      // 2. Thumbnails already have corrected orientation (difficult to get right in browser).
+      // 3. Later, we can extend this with optimizations for mobile and high-dpi screens.
+      const maxSize = 2048;
+      let pswpWidth = width;
+      let pswpHeight = height;
+      if (width > maxSize || height > maxSize) {
+        if (width > height) {
+          pswpWidth = maxSize;
+          pswpHeight /= (width / maxSize);
+        } else {
+          pswpWidth /= (height / maxSize);
+          pswpHeight = maxSize;
+        }
+      }
+      const pswpSrc = this.model.urls.getImageThumbnailURL(newImageData.relativePath, maxSize);
+
       // Append image to PhotoSwipe gallery.
       // Always use the same array so it'll work even if PhotoSwipe already open.
       const pswpImage = {
         index: newImageData.index,
-        w: newImageData.width,
-        h: newImageData.height,
-        src: newImageData.url,
+        w: pswpWidth,
+        h: pswpHeight,
+        src: pswpSrc,
         title: newImageData.name,
         elem: img[0],
       };
