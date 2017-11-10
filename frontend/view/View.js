@@ -176,6 +176,7 @@ class View {
         w: pswpWidth,
         h: pswpHeight,
         src: pswpSrc,
+        rawSrc: newImageData.url, // for our custom getImageURLForShare
         title: newImageData.name,
         elem: img[0],
       };
@@ -193,6 +194,8 @@ class View {
   }
 
   showSlideshow(currentImg) {
+    let pswp;
+
     const currentImgData = currentImg.data(IMAGE_DATA_KEY);
 
     const options = {
@@ -202,9 +205,24 @@ class View {
       loop: false,
       closeOnScroll: false,
       history: false,
+
+      shareButtons: [
+        {
+          id: 'view-original',
+          label: 'View original image',
+          url: '{{raw_image_url}}',
+        }, {
+          id: 'download-original',
+          label: 'Download original image',
+          url: '{{raw_image_url}}',
+          download: true,
+        },
+      ],
+
+      getImageURLForShare: () => pswp.currItem.rawSrc || '',
     };
 
-    const pswp = new PhotoSwipe(
+    pswp = new PhotoSwipe(
       this.photoswipe[0],
       PhotoSwipeUI_Default,
       this.pswpImages,
