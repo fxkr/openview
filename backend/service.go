@@ -193,7 +193,7 @@ func isImage(fileInfo os.FileInfo) bool {
 	ext := filepath.Ext(fileInfo.Name())
 	ext = strings.ToLower(ext)
 
-	if ext != ".jpg" && ext != ".jpeg" && ext == ".png" {
+	if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
 		return false
 	}
 
