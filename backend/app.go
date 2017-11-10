@@ -2,6 +2,7 @@ package backend
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/go-chi/chi"
@@ -60,7 +61,13 @@ func (app *Application) Run() error {
 }
 
 func (app *Application) handleResourceFile(w http.ResponseWriter, r *http.Request) {
-	relativePath, err := safe.NewRelativePath(strings.Trim(r.URL.Path, "/"))
+	unescapedPathStr, err := url.QueryUnescape(r.URL.Path)
+	if err != nil {
+		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
+		return
+	}
+
+	relativePath, err := safe.NewRelativePath(strings.Trim(unescapedPathStr, "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -70,7 +77,13 @@ func (app *Application) handleResourceFile(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *Application) handleResource(w http.ResponseWriter, r *http.Request) {
-	relativePath, err := safe.NewRelativePath(chi.URLParam(r, "*"))
+	unescapedPathStr, err := url.QueryUnescape(chi.URLParam(r, "*"))
+	if err != nil {
+		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
+		return
+	}
+
+	relativePath, err := safe.NewRelativePath(strings.Trim(unescapedPathStr, "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -102,7 +115,13 @@ func (app *Application) handlePath(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) handleFile(w http.ResponseWriter, r *http.Request) {
-	path, err := safe.NewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
+	unescapedPathStr, err := url.QueryUnescape(chi.URLParam(r, "*"))
+	if err != nil {
+		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
+		return
+	}
+
+	path, err := safe.NewRelativePath(strings.Trim(unescapedPathStr, "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -118,7 +137,13 @@ func (app *Application) handleDirectoryInfo(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	path, err := safe.NewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
+	unescapedPathStr, err := url.QueryUnescape(chi.URLParam(r, "*"))
+	if err != nil {
+		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
+		return
+	}
+
+	path, err := safe.NewRelativePath(strings.Trim(unescapedPathStr, "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -128,7 +153,13 @@ func (app *Application) handleDirectoryInfo(w http.ResponseWriter, r *http.Reque
 }
 
 func (app *Application) handleImageInfo(w http.ResponseWriter, r *http.Request) {
-	path, err := safe.NewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
+	unescapedPathStr, err := url.QueryUnescape(chi.URLParam(r, "*"))
+	if err != nil {
+		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
+		return
+	}
+
+	path, err := safe.NewRelativePath(strings.Trim(unescapedPathStr, "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
@@ -138,7 +169,13 @@ func (app *Application) handleImageInfo(w http.ResponseWriter, r *http.Request) 
 }
 
 func (app *Application) handleThumbnail(w http.ResponseWriter, r *http.Request) {
-	path, err := safe.NewRelativePath(strings.TrimSuffix(chi.URLParam(r, "*"), "/"))
+	unescapedPathStr, err := url.QueryUnescape(chi.URLParam(r, "*"))
+	if err != nil {
+		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
+		return
+	}
+
+	path, err := safe.NewRelativePath(strings.Trim(unescapedPathStr, "/"))
 	if err != nil {
 		handler.StatusError(http.StatusBadRequest, errors.WithStack(err)).ServeHTTP(w, r)
 		return
