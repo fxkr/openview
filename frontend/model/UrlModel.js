@@ -1,6 +1,6 @@
 export default class UrlModel {
   static getDirectory() {
-    return window.location.pathname;
+    return decodeURIComponent(window.location.pathname);
   }
 
   static getDirectoryInfoURL(nextPageToken) {
