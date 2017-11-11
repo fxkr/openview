@@ -62,6 +62,7 @@ test-gotest:
 	go test -v ./...
 
 install:
+	install -m 0755 -d "$(DESTDIR)/var/lib/openview"
 	install -m 0755 -d "$(DESTDIR)/var/cache/openview"
 	install -m 0755 -d "$(DESTDIR)/srv/images"
 	install -m 0755 -d "$(DESTDIR)/usr/share/openview/static"
@@ -72,17 +73,18 @@ install:
 
 package-deb:
 	fpm \
-		--name         "$(PACKAGE_NAME)" \
-		--description  "$(PACKAGE_DESCRIPTION)" \
-		--version      "$(PACKAGE_VERSION)" \
-		--maintainer   "$(PACKAGE_AUTHOR)" \
-		--vendor       "$(PACKAGE_AUTHOR)" \
-		--architecture "$(PACKAGE_ARCH)" \
-		--url          "$(PACKAGE_URL)" \
+		--name          "$(PACKAGE_NAME)" \
+		--description   "$(PACKAGE_DESCRIPTION)" \
+		--version       "$(PACKAGE_VERSION)" \
+		--maintainer    "$(PACKAGE_AUTHOR)" \
+		--vendor        "$(PACKAGE_AUTHOR)" \
+		--architecture  "$(PACKAGE_ARCH)" \
+		--url           "$(PACKAGE_URL)" \
 		-s dir \
 		-t deb \
-		--deb-systemd  "openview.service" \
-		--depends      "libmagickwand-dev" \
+		--deb-systemd   "openview.service" \
+		--after-install "package/after_install.sh" \
+		--depends       "libmagickwand-dev" \
 		"$(DESTDIR)/=/"
 
 package-deb-deploy:

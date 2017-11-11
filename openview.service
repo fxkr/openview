@@ -6,7 +6,8 @@ Documentation=https://github.com/fxkr/openview
 [Service]
 Type=simple
 ExecStart=/usr/bin/openview
-User=nobody
+User=openview
+Group=openview
 EnvironmentFile=-/usr/share/openview/default.conf
 EnvironmentFile=-/etc/openview.conf
 
