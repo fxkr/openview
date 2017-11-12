@@ -1,5 +1,8 @@
 # openview - A modern image gallery
 
+* Announcements mailing list (1 email per release): [openview-announce](https://www.freelists.org/list/openview-announce)
+* License: MIT (see LICENSE file)
+
 Design criteria:
 
 * Modern look, low distraction, high usability user interface. 
@@ -9,10 +12,6 @@ Design criteria:
 * Avoid reinventing the wheel.
 * Focus on stable and secure source code.
 * Self-hostable.
-
-The frontend was inspired by [Tumblr](https://www.tumblr.com/)'s low-distraction image wall, [flickr](http://www.flickr.com/)'s elegant layout and [fgallery](https://www.thregr.org/~wavexx/software/fgallery/)'s minimal UI.
-
-License: MIT (see LICENSE file)
 
 
 ## Installation
