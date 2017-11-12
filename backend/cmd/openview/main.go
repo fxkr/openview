@@ -55,6 +55,9 @@ func run() error {
 		profiling.SupportCPUProfiling(*cpuprofile, syscall.SIGUSR2)
 	}
 
+	backend.Initialize()
+	defer backend.Terminate()
+
 	app, err := backend.NewApplication(&backend.Config{
 		ResourceDir: safe.UnsafeNewPath(*resourcedir),
 		CacheDir:    safe.UnsafeNewPath(*cachedir),

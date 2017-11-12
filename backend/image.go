@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/pkg/errors"
-	"gopkg.in/gographics/imagick.v2/imagick"
 
 	"github.com/fxkr/openview/backend/cache"
 	"github.com/fxkr/openview/backend/image"
@@ -18,14 +17,6 @@ import (
 const (
 	ThumbnailContentType = "image/jpeg"
 )
-
-func Initialize() {
-	imagick.Initialize()
-}
-
-func Terminate() {
-	imagick.Terminate()
-}
 
 type ThumbnailOptions struct {
 	Width  *int
