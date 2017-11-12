@@ -154,7 +154,7 @@ func (s *service) GetImageThumbnail(path safe.RelativePath, size model.ThumbSize
 	cacheVersion := s.getImageVersion(fileInfo)
 
 	h, err := s.thumbnailCache.GetHandler(cacheKey, cacheVersion, func() (cache.Version, []byte, error) {
-		bytes, err := s.getThumbnail(path, size)
+		bytes, err := s.renderThumbnail(path, size)
 		if err != nil {
 			return nil, nil, errors.WithStack(err)
 		}

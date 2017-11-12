@@ -100,15 +100,6 @@ func (s *service) getImageData(path safe.RelativePath) (*model.Image, error) {
 	return &result, nil
 }
 
-func (s *service) getThumbnail(path safe.RelativePath, size model.ThumbSize) ([]byte, error) {
-	buf, err := s.renderThumbnail(path, size)
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
-	return buf, nil
-}
-
 func (s *service) renderThumbnail(path safe.RelativePath, size model.ThumbSize) ([]byte, error) {
 	fullPath := s.base.Join(path)
 
