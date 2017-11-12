@@ -2,6 +2,7 @@
 
 * Announcements mailing list (1 email per release): [openview-announce](https://www.freelists.org/list/openview-announce)
 * License: MIT (see LICENSE file)
+* Current state: alpha (works, many basic features missing, using it myself, testing encouraged, live use not recommended) (Nov 2017)
 
 Design criteria:
 
