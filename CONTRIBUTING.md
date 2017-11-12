@@ -24,3 +24,4 @@ This makes certain categories of issues like for example [path traversal](https:
 We use [CircleCI 2.0](https://circleci.com/) for automated builds, tests and packaging.
 The builds are based on a [Docker](https://www.docker.com/) container built and hosted on [Quay](https://quay.io/).
 Release packages are uploaded to [packagecloud](https://packagecloud.io/).
+Release emails are sent (manually) to a [mailing list hosted on freelists](https://www.freelists.org/list/openview-announce).
