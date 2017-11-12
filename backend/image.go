@@ -9,6 +9,7 @@ import (
 	"gopkg.in/gographics/imagick.v2/imagick"
 
 	"github.com/fxkr/openview/backend/cache"
+	"github.com/fxkr/openview/backend/image"
 	"github.com/fxkr/openview/backend/model"
 	"github.com/fxkr/openview/backend/util/handler"
 	"github.com/fxkr/openview/backend/util/safe"
@@ -55,28 +56,14 @@ func (s *service) getImageData(path safe.RelativePath) (*model.Image, error) {
 			return nil, nil, handler.StatusError(http.StatusNotFound, errors.WithStack(err))
 		}
 
-		mw := imagick.NewMagickWand()
-		defer mw.Destroy()
-		err = mw.ReadImage(fullPath.String())
+		value, err := image.GetImageData(fullPath)
 		if err != nil {
-			return nil, nil, handler.StatusError(http.StatusInternalServerError, errors.WithStack(err))
+			return nil, nil, errors.WithStack(err)
 		}
 
-		width := mw.GetImageWidth()
-		height := mw.GetImageHeight()
-
-		orientation := mw.GetImageOrientation()
-		if orientation == imagick.ORIENTATION_LEFT_TOP ||
-			orientation == imagick.ORIENTATION_RIGHT_TOP ||
-			orientation == imagick.ORIENTATION_RIGHT_BOTTOM ||
-			orientation == imagick.ORIENTATION_LEFT_BOTTOM {
-			width, height = height, width
-		}
-
-		value := model.Image{
-			Item:   model.Item{Name: path.Base(), RelativePath: path},
-			Width:  width,
-			Height: height,
+		value.Item = model.Item{
+			Name:         path.Base(),
+			RelativePath: path,
 		}
 
 		buf, err := json.Marshal(value)
