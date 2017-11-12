@@ -11,6 +11,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/fxkr/openview/backend/cache"
+	"github.com/fxkr/openview/backend/image"
 	"github.com/fxkr/openview/backend/model"
 	"github.com/fxkr/openview/backend/util/handler"
 	"github.com/fxkr/openview/backend/util/safe"
@@ -154,7 +155,7 @@ func (s *service) GetImageThumbnail(path safe.RelativePath, size model.ThumbSize
 	cacheVersion := s.getImageVersion(fileInfo)
 
 	h, err := s.thumbnailCache.GetHandler(cacheKey, cacheVersion, func() (cache.Version, []byte, error) {
-		bytes, err := s.renderThumbnail(path, size)
+		bytes, err := image.RenderThumbnail(fullPath, size)
 		if err != nil {
 			return nil, nil, errors.WithStack(err)
 		}
